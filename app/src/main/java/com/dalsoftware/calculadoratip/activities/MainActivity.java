@@ -18,6 +18,9 @@ import com.dalsoftware.calculadoratip.R;
 import com.dalsoftware.calculadoratip.TipCalcClass;
 import com.dalsoftware.calculadoratip.fragments.TipHistoryListFragment;
 import com.dalsoftware.calculadoratip.fragments.TipHistoryListFragmentListener;
+import com.dalsoftware.calculadoratip.models.TipRecord;
+
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -79,10 +82,14 @@ public class MainActivity extends AppCompatActivity {
         if (!strInputTotal.isEmpty()){
             double total = Double.parseDouble(strInputTotal);
             int tipPercentage = getTipPercentage();
-            double tip = total*(tipPercentage/100d);
 
-            String strTip = String.format(getString(R.string.global_message_tip), tip);
-            fragmentListener.action(strTip);
+            TipRecord tipRecord = new TipRecord();
+            tipRecord.setBill(total);
+            tipRecord.setTipPercentage(tipPercentage);
+            tipRecord.setTimestamp(new Date());
+
+            String strTip = String.format(getString(R.string.global_message_tip), tipRecord.getTip());
+            fragmentListener.addToList(tipRecord);
             txtTip.setVisibility(View.VISIBLE);
             txtTip.setText(strTip);
         }
@@ -98,6 +105,11 @@ public class MainActivity extends AppCompatActivity {
     public void handleClickDecrease(){
         hideKeyboard();
         handleTipChange(-TIP_STEP_CHANGE);
+    }
+
+    @OnClick(R.id.btnClear)
+    public void handleClickClear(){
+        fragmentListener.clearList();
     }
 
     private void handleTipChange(int change) {
