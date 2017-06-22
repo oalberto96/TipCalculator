@@ -72,6 +72,7 @@ public class TipHistoryListFragment extends Fragment implements TipHistoryListFr
     @Override
     public void onItemClick(TipRecord tipRecord) {
         Intent intent = new Intent(getActivity(), TipDetailActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(TipDetailActivity.TIP_KEY, tipRecord.getTip());
         intent.putExtra(TipDetailActivity.BILL_TOTAL_KEY, tipRecord.getBill());
         intent.putExtra(TipDetailActivity.DATE_KEY, tipRecord.getDateFormatted());
